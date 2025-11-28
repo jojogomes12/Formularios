@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recibo de Sinal — ORLA SCOOTER</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { margin: 0; padding: 0; }
+    }
+
+    #pdf-content {
+      width: 100%;
+      max-width: 850px;
+      background: white;
+      padding: 20px 30px;
+    }
+
+    .input-line {
+      border-bottom: 1px solid #000;
+      width: 100%;
+      height: 1.8em;
+      margin-top: 3px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 22px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    .textarea-box {
+      width: 100%;
+      min-height: 130px;
+      border: 1px solid #000;
+      padding: 8px;
+      margin-top: 8px;
+      resize: none;
+    }
+
+    .date-field {
+      border: none;
+      border-bottom: 1px solid black;
+      width: 120px;
+      padding-left: 3px;
+    }
+
+    .btn {
+      background-color: #f97316;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .btn:hover {
+      background-color: #ea580c;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="pdf-content">
+
+    <!-- Botão PDF -->
+    <div class="no-print text-center mb-6">
+      <button class="btn" onclick="gerarPDF()">Gerar PDF</button>
+    </div>
+
+    <!-- Cabeçalho -->
+    <div class="flex justify-between items-start mb-3">
+      <div>
+        <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16 object-contain" crossorigin="anonymous">
+        <p class="text-sm mt-1"><strong>Tel:</strong> (21) 96778-5726</p>
+        <p class="text-sm -mt-1"><strong>CNPJ:</strong> 59846.037/0001-88</p>
+      </div>
+
+      <div class="text-sm text-right leading-tight">
+        <label><strong>Data:</strong></label><br>
+        <input type="text" class="date-field" placeholder="__/__/____">
+      </div>
+    </div>
+
+    <p class="w-full text-center -mt-4 mb-4">
+      Avenida Benvindo Taques Horta Júnior, Jardim Atlântico Leste, Itaipuaçu — Maricá/RJ
+    </p>
+
+    <h2 class="text-center text-lg font-bold mb-6">RECIBO DE SINAL</h2>
+
+    <!-- Dados do Cliente -->
+    <div class="section-title">Dados do Cliente</div>
+    <div class="grid grid-cols-2 gap-5 text-sm mt-3">
+      <label>Nome:<input type="text" class="input-line"></label>
+      <label>Telefone:<input type="text" class="input-line"></label>
+
+      <label>CPF:<input type="text" class="input-line"></label>
+      <label>CEP:<input type="text" class="input-line"></label>
+
+      <label>Bairro:<input type="text" class="input-line"></label>
+      <label>Endereço:<input type="text" class="input-line"></label>
+
+      <label>Email:<input type="text" class="input-line"></label>
+    </div>
+
+    <!-- Dados do Veículo -->
+    <div class="section-title">Dados do Veículo</div>
+
+    <div class="grid grid-cols-2 gap-5 text-sm mt-3">
+      <label>Modelo:<input type="text" class="input-line"></label>
+      <label>Marca:<input type="text" class="input-line"></label>
+
+      <label>Cor:<input type="text" class="input-line"></label>
+      <label>Ano:<input type="text" class="input-line"></label>
+    </div>
+
+    <!-- Valores -->
+    <div class="section-title">Valores</div>
+
+    <div class="grid grid-cols-2 gap-5 text-sm mt-3">
+      <label>Valor Total do Veículo (R$):<input type="text" class="input-line"></label>
+      <label>Valor do Sinal (R$):<input type="text" class="input-line"></label>
+
+      <label>Restante (R$):<input type="text" 51.072.514/0001-79="input-line"></label>
+
+      <label>Data Prevista para Quitação:
+        <input type="text" class="date-field" placeholder="__/__/____">
+      </label>
+    </div>
+
+    <!-- Observações -->
+    <div class="section-title">Observações</div>
+    <textarea class="textarea-box"></textarea>
+
+   
+
+  </div>
+
+  <script>
+    function gerarPDF() {
+      const element = document.getElementById('pdf-content');
+
+      const options = {
+        margin: 0,
+        filename: 'Recibo_de_Sinal_ORLA.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      document.querySelector('.no-print').style.display = "none";
+
+      html2pdf().set(options).from(element).save().then(() => {
+        document.querySelector('.no-print').style.display = "block";
+      });
+    }
+  </script>
+
+</body>
+</html>

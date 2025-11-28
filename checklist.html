@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Entrada de Veículo — ORLA SCOOTER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none; }
+      body { background: white; margin: 0; }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      color: #000;
+      padding: 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    img {
+      image-rendering: auto;
+    }
+
+    .input-line {
+      border-bottom: 1px solid #000;
+      display: inline-block;
+      width: 100%;
+      height: 1.5em;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 1rem;
+      border-bottom: 1px solid #000;
+      padding-bottom: 0.2rem;
+      font-size: 1rem;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.25rem 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #000;
+      background-color: #fff;
+      border: 1px solid #000;
+      appearance: none;
+      display: inline-block;
+      position: relative;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked::after {
+      content: "✔";
+      position: absolute;
+      left: 2px;
+      top: -1px;
+      font-size: 16px;
+      color: #000;
+    }
+
+    .line-space {
+      border-bottom: 1px solid #000;
+      flex: 1;
+      margin-left: 0.4rem;
+      height: 1.2em;
+    }
+
+    textarea {
+      border: none;
+      width: 100%;
+      height: 80px;
+      line-height: 1.5em;
+      background-image: linear-gradient(to bottom, transparent 95%, black 96%);
+      background-size: 100% 1.5em;
+      resize: none;
+      font-size: 0.95rem;
+      padding: 4px;
+    }
+
+    .signature {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .signature-line {
+      border-top: 1px solid #000;
+      width: 45%;
+      text-align: center;
+      padding-top: 0.3rem;
+    }
+
+    .btn {
+      background-color: #f97316;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #ea580c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print text-center">
+    <button class="btn" onclick="gerarPDF()">Gerar PDF</button>
+  </div>
+
+  <div id="pdf-content">
+<!-- Cabeçalho -->
+
+<div class="flex justify-between items-start mb-2">
+  <!-- Logo e telefone -->
+  <div>
+    <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" alt="Logo Orla Scooter" class="h-16 object-contain" crossorigin="anonymous">
+    <p class="text-sm mt-1"><strong>Tel:</strong> (21) 96778-5726</p>
+  </div>
+
+  <!-- Data à direita -->
+  <div class="text-sm leading-tight text-right">
+    <p><strong>Data:</strong> ____/___/____</p>
+  </div>
+</div>
+
+<!-- Endereço centralizado, subindo um pouco mais -->
+<div class="w-full text-center -mt-4">
+  <p> Avenida Benvindo Taques Horta Júnior, Jardim Atlântico Leste, Itaipuaçu Maricá - RJ</p>
+</div>
+
+<h2 class="text-center text-lg font-bold mb-1">Checklist de Entrada de Veículo</h2>
+
+
+    <!-- Dados do Cliente -->
+    <div class="section-title">Dados do Cliente</div>
+    <div class="grid grid-cols-2 gap-2 text-sm">
+      <label>Nome:<input type="text" class="input-line"></label>
+      <label>Telefone:<input type="text" class="input-line"></label>
+      <label>CEP:<input type="text" class="input-line w-24"></label>
+      <label>Município:<input type="text" class="input-line w-40"></label>
+      <label>Bairro:<input type="text" class="input-line w-40"></label>
+      <label>Endereço:<input type="text" class="input-line"></label>
+      <label>Email:<input type="text" class="input-line"></label>
+    </div>
+
+    <!-- Dados do Veículo -->
+    <div class="section-title">Dados do Veículo</div>
+    <div class="grid grid-cols-2 gap-2 text-sm">
+      <label>Modelo:<input type="text" class="input-line"></label>
+      <label>Marca:<input type="text" class="input-line"></label>
+      <label>Cor:<input type="text" class="input-line w-32"></label>
+      <label>Ano de Fabricação:<input type="text" class="input-line w-32"></label>
+      <label>KM:<input type="text" class="input-line w-24"></label>
+    </div>
+
+    <!-- Checklist -->
+    <div class="section-title">Itens do Veículo</div>
+    <div class="checkbox-grid text-sm">
+      <div class="checkbox-item"><input type="checkbox"> Suspensão<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Pneu<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Painel<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Acelerador<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Farol<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Start<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Lanterna<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Luz de Freio<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Guidão<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Garfo<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Bateria<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Chave de Espera<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Freios<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Carenagem<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Pedaleira<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Manete<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Retrovisor<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Pisca Alerta<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Módulo<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Motor<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Descanso<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Chaves<div class="line-space"></div></div>
+      <div class="checkbox-item"><input type="checkbox"> Outros<div class="line-space"></div></div>
+    </div>
+
+    <!-- Observações -->
+    <div class="section-title">Observações: ___________</div>
+    <textarea></textarea>
+
+    <!-- Assinaturas -->
+    <div class="signature text-sm">
+      <div class="signature-line">Assinatura do Cliente</div>
+      <div class="signature-line">Assinatura do Responsável</div>
+    </div>
+  </div>
+
+  <script>
+    function gerarPDF() {
+      const element = document.getElementById('pdf-content');
+      const opt = {
+        margin: 0.3,
+        filename: 'Checklist_Entrada_Veiculo.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termo de Test Drive — ORLA SCOOTER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      .no-print { display: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-4">
+  <div class="max-w-3xl mx-auto bg-white shadow-md p-8 mb-6">
+    <!-- Logo -->
+    <div class="flex justify-center mb-8">
+      <img src="https://raw.githubusercontent.com/jojogomes12/Formulario/main/logo.jpg" 
+           alt="Logo Orla Scooter" 
+           class="h-24 w-auto">
+    </div>
+
+    <!-- Título -->
+    <h1 class="text-center text-3xl font-bold text-gray-800 mb-2">ORLA SCOOTER</h1>
+    <p class="text-center text-gray-600 text-sm mb-8">
+      Termo de Responsabilidade — Test Drive
+    </p>
+
+    <!-- Formulário -->
+    <form id="termoForm" class="space-y-6">
+      <!-- Dados do Cliente -->
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-700 block mb-2">Nome Completo:</label>
+          <input type="text" id="nome" class="w-full border-b-2 border-gray-300 px-2 py-2 focus:outline-none focus:border-orange-500" placeholder="Digite seu nome completo">
+        </div>
+        
+        <div>
+          <label class="text-sm font-semibold text-gray-700 block mb-2">CPF:</label>
+          <input type="text" id="cpf" class="w-full border-b-2 border-gray-300 px-2 py-2 focus:outline-none focus:border-orange-500" placeholder="000.000.000-00" maxlength="14">
+        </div>
+      </div>
+
+      <!-- Texto do Termo -->
+      <div class="mt-8 bg-gray-50 p-6 rounded-lg">
+        <p class="text-sm leading-relaxed text-gray-700 text-justify">
+          Declaro que realizarei <strong> o test drive</strong> de scooter/moto elétrica da <strong>ORLA SCOOTERS ELÉTRICAS</strong> e assumo <strong>TOTAL RESPONSABILIDADE</strong> por:
+        </p>
+        
+        <ul class="mt-4 space-y-3 text-sm text-gray-700">
+          <li class="flex items-start">
+            <span class="text-orange-500 font-bold mr-2">•</span>
+            <span><strong>Qualquer dano, queda ou avaria</strong> causado ao veículo durante o test drive, comprometendo-me a arcar com todos os custos de reparo.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 font-bold mr-2">•</span>
+            <span><strong>Furto, roubo ou desaparecimento</strong> do veículo, responsabilizando-me pelo <strong>valor total</strong> da scooter/moto em caso de não recuperação.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 font-bold mr-2">•</span>
+            <span><strong>Acidentes envolvendo terceiros</strong>, assumindo responsabilidade civil e criminal por danos materiais ou corporais.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 font-bold mr-2">•</span>
+            <span><strong>Multas e infrações de trânsito</strong> cometidas durante o período do test drive.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 font-bold mr-2">•</span>
+            <span>Devolver o veículo no <strong>horário e local acordados</strong>, nas mesmas condições em que o recebi.</span>
+          </li>
+        </ul>
+
+        <p class="mt-6 text-sm leading-relaxed text-gray-700 text-justify">
+          Estou ciente de que este termo possui <strong>validade legal</strong> e que a <strong>ORLA SCOOTERS ELÉTRICAS</strong> poderá tomar as medidas cabíveis, incluindo ações judiciais, para ressarcimento de danos ou perdas causadas por mim durante o test drive.
+        </p>
+      </div>
+
+      <!-- Data e Local -->
+      <div class="mt-8">
+        <p class="text-center text-sm text-gray-600" id="localData"></p>
+      </div>
+
+      <!-- Área de Assinatura -->
+      <div class="mt-12 mb-8">
+        <div class="max-w-md mx-auto">
+          <div class="border-b-2 border-gray-800 h-24 mb-3"></div>
+          <p class="text-center text-sm font-bold text-gray-800">Assinatura do Cliente</p>
+          <p class="text-center text-xs text-gray-500 mt-2">
+            (Declaro estar ciente e de acordo com os termos acima)
+          </p>
+        </div>
+      </div>
+
+      <!-- Botão -->
+      <div class="flex justify-center pt-6 no-print">
+        <button type="button" onclick="gerarPDF()" class="bg-orange-500 text-white px-10 py-3 rounded-lg hover:bg-orange-600 transition font-semibold shadow-lg">
+          Gerar PDF
+        </button>
+      </div>
+    </form>
+
+    <p class="text-center text-xs text-gray-400 mt-8">Orla Scooter — Termo de Responsabilidade Test Drive</p>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Máscara para CPF
+    document.getElementById('cpf').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        e.target.value = value;
+      }
+    });
+
+    // Atualizar local e data automaticamente
+    function atualizarLocalData() {
+      const hoje = new Date();
+      const dia = String(hoje.getDate()).padStart(2, '0');
+      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+      const ano = hoje.getFullYear();
+      document.getElementById('localData').textContent = `Maricá, ${dia}/${mes}/${ano}`;
+    }
+    
+    window.onload = atualizarLocalData;
+
+    async function gerarPDF() {
+      const nome = document.getElementById('nome').value;
+      const cpf = document.getElementById('cpf').value;
+      
+      if (!nome || !cpf) {
+        alert('Por favor, preencha nome e CPF antes de gerar o PDF.');
+        return;
+      }
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const marginLeft = 20;
+      const marginRight = 190;
+      let y = 20;
+      
+      // Carregar logo
+      const logoUrl = 'https://raw.githubusercontent.com/jojogomes12/Formulario/main/logo.jpg';
+      let logoImg = null;
+      
+      try {
+        const response = await fetch(logoUrl);
+        const blob = await response.blob();
+        logoImg = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar logo:', error);
+      }
+      
+      // Logo
+      if (logoImg) {
+        doc.addImage(logoImg, 'JPEG', 85, y, 40, 20);
+        y += 28;
+      }
+      
+      // Título
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ORLA SCOOTER', 105, y, { align: 'center' });
+      y += 8;
+      
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Termo de Responsabilidade — Test Drive', 105, y, { align: 'center' });
+      y += 15;
+      
+      // Dados do cliente
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Nome:', marginLeft, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(nome, marginLeft + 15, y);
+      y += 7;
+      
+      doc.setFont('helvetica', 'bold');
+      doc.text('CPF:', marginLeft, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(cpf, marginLeft + 15, y);
+      y += 12;
+      
+      // Texto do termo
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      
+      const texto1 = 'Declaro que realizarei TEST DRIVE de scooter/moto elétrica da ORLA SCOOTERS ELÉTRICAS e assumo TOTAL RESPONSABILIDADE por:';
+      const linhas1 = doc.splitTextToSize(texto1, marginRight - marginLeft);
+      doc.text(linhas1, marginLeft, y);
+      y += linhas1.length * 5 + 5;
+      
+      // Responsabilidades
+      const responsabilidades = [
+        '• Qualquer dano, queda ou avaria causado ao veículo durante o test drive, comprometendo-me a arcar com todos os custos de reparo.',
+        '• Furto, roubo ou desaparecimento do veículo, responsabilizando-me pelo valor total da scooter/moto em caso de não recuperação.',
+        '• Acidentes envolvendo terceiros, assumindo responsabilidade civil e criminal por danos materiais ou corporais.',
+        '• Multas e infrações de trânsito cometidas durante o período do test drive.',
+        '• Devolver o veículo no horário e local acordados, nas mesmas condições em que o recebi.'
+      ];
+      
+      responsabilidades.forEach(resp => {
+        const linhasResp = doc.splitTextToSize(resp, marginRight - marginLeft - 3);
+        doc.text(linhasResp, marginLeft + 3, y);
+        y += linhasResp.length * 5 + 3;
+      });
+      
+      y += 3;
+      
+      const texto2 = 'Estou ciente de que este termo possui validade legal e que a ORLA SCOOTERS ELÉTRICAS poderá tomar as medidas cabíveis, incluindo ações judiciais, para ressarcimento de danos ou perdas causadas por mim durante o test drive.';
+      const linhas2 = doc.splitTextToSize(texto2, marginRight - marginLeft);
+      doc.text(linhas2, marginLeft, y);
+      y += linhas2.length * 5 + 15;
+      
+      // Data atual
+      const hoje = new Date();
+      const dia = String(hoje.getDate()).padStart(2, '0');
+      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+      const ano = hoje.getFullYear();
+      const dataAtual = `${dia}/${mes}/${ano}`;
+      
+      doc.text(`Maricá, ${dataAtual}`, 105, y, { align: 'center' });
+      y += 15;
+      
+      // Assinatura
+      doc.line(60, y, 150, y);
+      y += 6;
+      doc.setFont('helvetica', 'bold');
+      doc.text('Assinatura do Cliente', 105, y, { align: 'center' });
+      y += 5;
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'italic');
+      doc.text('(Declaro estar ciente e de acordo com os termos acima)', 105, y, { align: 'center' });
+      
+      // Rodapé
+      y += 15;
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Orla Scooter — Termo de Responsabilidade Test Drive', 105, y, { align: 'center' });
+      
+      // Salvar PDF
+      const nomeArquivo = `termo-testdrive-${nome.replace(/\s+/g, '_').toLowerCase()}.pdf`;
+      doc.save(nomeArquivo);
+    }
+  </script>
+</body>
+</html>

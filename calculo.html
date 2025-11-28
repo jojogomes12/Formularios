@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulação de Juros — até 21x</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-5xl">
+    <h1 class="text-2xl font-bold text-center text-orange-600 mb-6">
+      Simulador de Juros — 1x até 21x
+    </h1>
+
+    <p class="text-gray-600 text-sm mb-6 text-center">
+      Preencha os valores à vista e parcelados para cada quantidade de parcelas.  
+      O sistema calcula automaticamente o aumento percentual.
+    </p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border border-gray-300">
+        <thead class="bg-gray-200 text-gray-800">
+          <tr>
+            <th class="p-2 border">Parcelas</th>
+            <th class="p-2 border">Valor à Vista (R$)</th>
+            <th class="p-2 border">Valor Parcelado (R$)</th>
+            <th class="p-2 border">Aumento (%)</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCampos" class="text-center"></tbody>
+      </table>
+    </div>
+
+    <div class="mt-6 text-center">
+      <button onclick="calcularAumentos()" class="bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700 transition">
+        Calcular Aumentos
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    const tabela = document.getElementById('tabelaCampos');
+
+    // Cria 21 linhas com dois campos (à vista e parcelado)
+    for (let i = 1; i <= 21; i++) {
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td class="p-2 border font-semibold">${i}x</td>
+        <td class="p-2 border">
+          <input id="avista-${i}" type="number" step="0.01" placeholder="0.00"
+            class="w-full border rounded p-1 text-center">
+        </td>
+        <td class="p-2 border">
+          <input id="parcelado-${i}" type="number" step="0.01" placeholder="0.00"
+            class="w-full border rounded p-1 text-center">
+        </td>
+        <td class="p-2 border font-semibold text-orange-600" id="aumento-${i}">-</td>
+      `;
+      tabela.appendChild(linha);
+    }
+
+    // Função para calcular o aumento de todos os campos
+    function calcularAumentos() {
+      for (let i = 1; i <= 21; i++) {
+        const avista = parseFloat(document.getElementById(`avista-${i}`).value);
+        const parcelado = parseFloat(document.getElementById(`parcelado-${i}`).value);
+        const campoAumento = document.getElementById(`aumento-${i}`);
+
+        if (avista > 0 && parcelado > 0) {
+          const aumento = ((parcelado - avista) / avista) * 100;
+          campoAumento.textContent = `${Math.round(aumento)}%`;
+        } else {
+          campoAumento.textContent = '-';
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
