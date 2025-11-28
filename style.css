@@ -1,0 +1,98 @@
+/* ====== GERAL ====== */
+body {
+    background: #111;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+}
+
+/* ====== LOGO ====== */
+header {
+    width: 100%;
+    padding: 20px 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img {
+    width: 180px;
+    max-width: 70%;
+}
+
+/* ====== DASHBOARD ====== */
+.dashboard {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* ====== CARDS ====== */
+.card {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 16px;
+    border: 2px solid #ff7b00;
+    cursor: pointer;
+    transition: 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 18px #ff7b00;
+}
+
+.card h3 {
+    text-align: center;
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+/* ====== CONTEÚDO EXPANDIDO ====== */
+.card-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transition:
+        max-height 0.45s ease,
+        opacity 0.35s ease 0.1s;
+}
+
+.card.open .card-content {
+    max-height: 330px;
+    opacity: 1;
+}
+
+.card-content img {
+    width: 160px;
+    margin: 15px 0;
+    border-radius: 10px;
+    border: 2px solid #ff7b00;
+}
+
+/* ====== BOTÃO ====== */
+.card-content a {
+    background: #ff7b00;
+    padding: 10px 22px;
+    border-radius: 10px;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.card-content a:hover {
+    background: #ffa64c;
+    transform: scale(1.05);
+}
