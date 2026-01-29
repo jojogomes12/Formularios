@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revisão — ORLA SCOOTER</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+@media print {
+  .no-print { display: none; }
+  body { background: #fff; }
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  padding: 1rem;
+}
+
+.folha {
+  background: #fff;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.input {
+  border: none;
+  border-bottom: 1px solid #000;
+  width: 100%;
+  outline: none;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.data-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.data-input {
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+  font-size: 0.9rem;
+  background: transparent;
+  text-align: center;
+  padding: 0 0 2px 0;
+}
+
+.data-input.dia { width: 20px; }
+.data-input.mes { width: 20px; }
+.data-input.ano { width: 40px; }
+
+.separador {
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0 1px;
+}
+
+textarea {
+  border: none;
+  width: 100%;
+  height: 90px;
+  resize: none;
+  line-height: 1.6em;
+  font-size: 0.9rem;
+  background-image: linear-gradient(to bottom, transparent 95%, black 96%);
+  background-size: 100% 1.6em;
+  outline: none;
+}
+
+.corte {
+  border-top: 2px dashed #000;
+  margin: 3rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.assinatura {
+  border-top: 1px solid #000;
+  width: 45%;
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 2.5rem;
+}
+
+.btn {
+  background: #f97316;
+  color: #fff;
+  padding: 0.8rem 2.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn:hover {
+  background: #ea580c;
+}
+</style>
+</head>
+
+<body>
+
+<div class="no-print text-center mb-4">
+  <button class="btn" onclick="iniciarFluxo()">Gerar PDF</button>
+</div>
+
+<div id="pdf-content" class="folha">
+
+<!-- ===== VIA 1 ===== -->
+<div>
+  <div class="flex justify-between items-start mb-2">
+    <div>
+      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16">
+      <p class="text-sm"><strong>Tel:</strong> (21) 96778-5726</p>
+    </div>
+    <div class="text-sm">
+      <strong>Data:</strong>
+      <div class="data-container">
+        <input id="dia1" class="data-input dia" maxlength="2">
+        <span class="separador">/</span>
+        <input id="mes1" class="data-input mes" maxlength="2">
+        <span class="separador">/</span>
+        <input id="ano1" class="data-input ano" maxlength="4">
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center text-sm -mt-2">
+    Avenida Benvindo Taques Horta Júnior, Jardim Atlântico Leste, Itaipuaçu – Maricá/RJ
+  </div>
+
+  <h2 class="text-center font-bold text-lg mt-2">CHECKLIST DE REVISÃO</h2>
+
+  <p class="text-red-700 text-sm text-center mt-1">
+    <strong>*Prazo mínimo para avaliação de 24hrs. Assim que concluído entraremos em contato.*</strong>
+  </p>
+
+  <div class="grid grid-cols-2 gap-4 text-sm mt-5">
+    <label>Cliente: <input class="input" id="cliente1"></label>
+    <label>Telefone: <input class="input" id="telefone1"></label>
+    <label>Modelo: <input class="input" id="modelo1"></label>
+    <label>Marca: <input class="input" id="marca1"></label>
+  </div>
+
+  <div class="mt-5 text-sm">
+    <label class="font-bold">Observações:</label>
+    <textarea id="obs1"></textarea>
+  </div>
+
+  <div class="flex justify-between text-sm">
+    <div class="assinatura">Assinatura do Cliente</div>
+    <div class="assinatura">Assinatura do Responsável</div>
+  </div>
+</div>
+
+<div class="corte">✂ CORTE AQUI</div>
+
+<!-- ===== VIA 2 ===== -->
+<div>
+  <div class="flex justify-between items-start mb-2">
+    <div>
+      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16">
+      <p class="text-sm"><strong>Tel:</strong> (21) 96778-5726</p>
+    </div>
+    <div class="text-sm">
+      <strong>Data:</strong>
+      <div class="data-container">
+        <input id="dia2" class="data-input dia" maxlength="2" readonly>
+        <span class="separador">/</span>
+        <input id="mes2" class="data-input mes" maxlength="2" readonly>
+        <span class="separador">/</span>
+        <input id="ano2" class="data-input ano" maxlength="4" readonly>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center text-sm -mt-2">
+    Avenida Benvindo Taques Horta Júnior, Jardim Atlântico Leste, Itaipuaçu – Maricá/RJ
+  </div>
+
+  <h2 class="text-center font-bold text-lg mt-2">CHECKLIST DE REVISÃO</h2>
+
+  <p class="text-red-700 text-sm text-center mt-1">
+    <strong>*Prazo mínimo para avaliação de 24hrs. Assim que concluído entraremos em contato.*</strong>
+  </p>
+
+  <div class="grid grid-cols-2 gap-4 text-sm mt-5">
+    <label>Cliente: <input class="input" id="cliente2" readonly></label>
+    <label>Telefone: <input class="input" id="telefone2" readonly></label>
+    <label>Modelo: <input class="input" id="modelo2" readonly></label>
+    <label>Marca: <input class="input" id="marca2" readonly></label>
+  </div>
+
+  <div class="mt-5 text-sm">
+    <label class="font-bold">Observações:</label>
+    <textarea id="obs2" readonly></textarea>
+  </div>
+
+  <div class="flex justify-between text-sm">
+    <div class="assinatura">Assinatura do Cliente</div>
+    <div class="assinatura">Assinatura do Responsável</div>
+  </div>
+</div>
+
+</div>
+
+<!-- MODAL DATA -->
+<div id="modalData" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+  <div class="bg-white p-6 rounded w-80 text-sm">
+    <p class="mb-2">Deseja deixar a <strong>data em branco</strong>?</p>
+    <p class="text-xs text-gray-600 mb-4">A data poderá ser preenchida manualmente após a impressão.</p>
+    <div class="flex gap-2 mt-4">
+      <button class="btn bg-gray-400 w-full" onclick="fechar('modalData')">Voltar</button>
+      <button class="btn w-full" onclick="confirmarDataVazia()">Sim</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ITENS -->
+<div id="modalItens" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+  <div class="bg-white p-6 rounded w-96 text-sm">
+    <p class="mb-3">Deseja informar os <strong>itens deixados</strong>?</p>
+
+    <label class="block mb-2">Carregador:
+      <select id="carregador" class="input mt-1">
+        <option>Não</option>
+        <option>Sim</option>
+      </select>
+    </label>
+
+    <label class="block mb-2">Quantidade de chaves:
+      <input id="chaves" class="input mt-1" placeholder="Ex: 1, 2...">
+    </label>
+
+    <label class="block mb-3">Outros itens:
+      <input id="outros" class="input mt-1" placeholder="Ex: Capacete, documentos...">
+    </label>
+
+    <div class="flex gap-2">
+      <button class="btn bg-gray-400 w-full" onclick="gerarPDF()">Não informar</button>
+      <button class="btn w-full" onclick="confirmarItens()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auto-avançar entre campos de data
+document.getElementById('dia1').addEventListener('input', function(e) {
+  if (e.target.value.length === 2) {
+    document.getElementById('mes1').focus();
+  }
+});
+
+document.getElementById('mes1').addEventListener('input', function(e) {
+  if (e.target.value.length === 2) {
+    document.getElementById('ano1').focus();
+  }
+});
+
+// Permitir apenas números nos campos de data
+document.querySelectorAll('.data-input').forEach(input => {
+  input.addEventListener('keypress', function(e) {
+    if (!/\d/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Tab') {
+      e.preventDefault();
+    }
+  });
+});
+
+function iniciarFluxo() {
+  const dia = document.getElementById('dia1').value.trim();
+  const mes = document.getElementById('mes1').value.trim();
+  const ano = document.getElementById('ano1').value.trim();
+  
+  if (dia === '' || mes === '' || ano === '') {
+    abrir('modalData');
+    return;
+  }
+  
+  // Copiar data para via 2
+  document.getElementById('dia2').value = dia;
+  document.getElementById('mes2').value = mes;
+  document.getElementById('ano2').value = ano;
+  
+  // Copiar dados dos campos para via 2
+  copiarDados();
+  
+  abrir('modalItens');
+}
+
+function copiarDados() {
+  document.getElementById('cliente2').value = document.getElementById('cliente1').value;
+  document.getElementById('telefone2').value = document.getElementById('telefone1').value;
+  document.getElementById('modelo2').value = document.getElementById('modelo1').value;
+  document.getElementById('marca2').value = document.getElementById('marca1').value;
+  document.getElementById('obs2').value = document.getElementById('obs1').value;
+}
+
+function confirmarDataVazia() {
+  // Deixar vazio para preenchimento manual
+  document.getElementById('dia1').value = '';
+  document.getElementById('mes1').value = '';
+  document.getElementById('ano1').value = '';
+  document.getElementById('dia2').value = '';
+  document.getElementById('mes2').value = '';
+  document.getElementById('ano2').value = '';
+  
+  fechar('modalData');
+  copiarDados();
+  abrir('modalItens');
+}
+
+function confirmarItens() {
+  const carregador = document.getElementById('carregador').value;
+  const chaves = document.getElementById('chaves').value;
+  const outros = document.getElementById('outros').value;
+  
+  const texto =
+    `Itens deixados: Carregador: ${carregador} | ` +
+    `Chaves: ${chaves || '—'} | Outros: ${outros || '—'}`;
+  
+  const obs1 = document.getElementById('obs1');
+  const obs2 = document.getElementById('obs2');
+  
+  obs1.value += (obs1.value ? '\n' : '') + texto;
+  obs2.value = obs1.value;
+  
+  gerarPDF();
+}
+
+function gerarPDF() {
+  fechar('modalItens');
+  copiarDados();
+  
+  html2pdf().set({
+    margin: 0.4,
+    filename: 'Checklist_Revisao_Orla_Scooter.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { format: 'a4', orientation: 'portrait' }
+  }).from(document.getElementById('pdf-content')).save();
+}
+
+function abrir(id) {
+  document.getElementById(id).classList.remove('hidden');
+  document.getElementById(id).classList.add('flex');
+}
+
+function fechar(id) {
+  document.getElementById(id).classList.add('hidden');
+  document.getElementById(id).classList.remove('flex');
+}
+</script>
+
+</body>
+</html>
