@@ -40,6 +40,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0;
+  line-height: 1;
 }
 
 .data-input {
@@ -49,29 +50,64 @@ body {
   font-size: 0.9rem;
   background: transparent;
   text-align: center;
-  padding: 0 0 2px 0;
+  padding: 0;
+  margin: 0;
 }
 
-.data-input.dia { width: 20px; }
-.data-input.mes { width: 20px; }
-.data-input.ano { width: 40px; }
+.data-input.dia { width: 18px; }
+.data-input.mes { width: 18px; }
+.data-input.ano { width: 36px; }
 
 .separador {
   font-size: 0.9rem;
   margin: 0;
-  padding: 0 1px;
+  padding: 0;
+  line-height: 1;
+  border-bottom: 1px solid #000;
+  padding-bottom: 2px;
+}
+
+.obs-container {
+  position: relative;
+  width: 100%;
+  min-height: 90px;
+}
+
+.linhas-fundo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.linha {
+  width: 100%;
+  height: 1px;
+  background: #000;
+  margin-top: 1.5em;
+}
+
+.linha:first-child {
+  margin-top: 1.5em;
 }
 
 textarea {
+  position: relative;
   border: none;
   width: 100%;
-  height: 90px;
+  min-height: 90px;
   resize: none;
-  line-height: 1.6em;
+  line-height: 1.5em;
   font-size: 0.9rem;
-  background-image: linear-gradient(to bottom, transparent 95%, black 96%);
-  background-size: 100% 1.6em;
   outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: transparent;
+  z-index: 1;
 }
 
 .corte {
@@ -117,7 +153,7 @@ textarea {
 <div>
   <div class="flex justify-between items-start mb-2">
     <div>
-      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16">
+      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16" crossorigin="anonymous" id="logo1">
       <p class="text-sm"><strong>Tel:</strong> (21) 96778-5726</p>
     </div>
     <div class="text-sm">
@@ -151,7 +187,16 @@ textarea {
 
   <div class="mt-5 text-sm">
     <label class="font-bold">Observações:</label>
-    <textarea id="obs1"></textarea>
+    <div class="obs-container">
+      <div class="linhas-fundo">
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+      </div>
+      <textarea id="obs1"></textarea>
+    </div>
   </div>
 
   <div class="flex justify-between text-sm">
@@ -160,13 +205,13 @@ textarea {
   </div>
 </div>
 
-<div class="corte">✂ CORTE AQUI</div>
+<div class="corte"></div>
 
 <!-- ===== VIA 2 ===== -->
 <div>
   <div class="flex justify-between items-start mb-2">
     <div>
-      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16">
+      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16" crossorigin="anonymous" id="logo2">
       <p class="text-sm"><strong>Tel:</strong> (21) 96778-5726</p>
     </div>
     <div class="text-sm">
@@ -200,7 +245,16 @@ textarea {
 
   <div class="mt-5 text-sm">
     <label class="font-bold">Observações:</label>
-    <textarea id="obs2" readonly></textarea>
+    <div class="obs-container">
+      <div class="linhas-fundo">
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+        <div class="linha"></div>
+      </div>
+      <textarea id="obs2" readonly></textarea>
+    </div>
   </div>
 
   <div class="flex justify-between text-sm">
@@ -212,7 +266,7 @@ textarea {
 </div>
 
 <!-- MODAL DATA -->
-<div id="modalData" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+<div id="modalData" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center" style="z-index: 9999;">
   <div class="bg-white p-6 rounded w-80 text-sm">
     <p class="mb-2">Deseja deixar a <strong>data em branco</strong>?</p>
     <p class="text-xs text-gray-600 mb-4">A data poderá ser preenchida manualmente após a impressão.</p>
@@ -224,7 +278,7 @@ textarea {
 </div>
 
 <!-- MODAL ITENS -->
-<div id="modalItens" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+<div id="modalItens" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center" style="z-index: 9999;">
   <div class="bg-white p-6 rounded w-96 text-sm">
     <p class="mb-3">Deseja informar os <strong>itens deixados</strong>?</p>
 
@@ -273,6 +327,32 @@ document.querySelectorAll('.data-input').forEach(input => {
   });
 });
 
+// Converter logo para base64 antes de gerar PDF
+async function converterLogoParaBase64() {
+  return new Promise((resolve) => {
+    const img1 = document.getElementById('logo1');
+    const img2 = document.getElementById('logo2');
+    
+    // Tentar converter a imagem para base64
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img1.naturalWidth || img1.width;
+      canvas.height = img1.naturalHeight || img1.height;
+      ctx.drawImage(img1, 0, 0);
+      const base64 = canvas.toDataURL('image/jpeg');
+      
+      // Aplicar base64 nas duas logos
+      img1.src = base64;
+      img2.src = base64;
+      resolve(true);
+    } catch (e) {
+      console.log('Não foi possível converter logo para base64:', e);
+      resolve(false);
+    }
+  });
+}
+
 function iniciarFluxo() {
   const dia = document.getElementById('dia1').value.trim();
   const mes = document.getElementById('mes1').value.trim();
@@ -318,32 +398,43 @@ function confirmarDataVazia() {
 
 function confirmarItens() {
   const carregador = document.getElementById('carregador').value;
-  const chaves = document.getElementById('chaves').value;
-  const outros = document.getElementById('outros').value;
+  const chaves = document.getElementById('chaves').value.trim();
+  const outros = document.getElementById('outros').value.trim();
   
-  const texto =
-    `Itens deixados: Carregador: ${carregador} | ` +
-    `Chaves: ${chaves || '—'} | Outros: ${outros || '—'}`;
-  
-  const obs1 = document.getElementById('obs1');
-  const obs2 = document.getElementById('obs2');
-  
-  obs1.value += (obs1.value ? '\n' : '') + texto;
-  obs2.value = obs1.value;
+  // Só adicionar se houver algum item preenchido
+  if (carregador === 'Sim' || chaves !== '' || outros !== '') {
+    const texto = `Itens deixados: Carregador: ${carregador} | Chaves: ${chaves || '—'} | Outros: ${outros || '—'}`;
+    
+    const obs1 = document.getElementById('obs1');
+    const obs2 = document.getElementById('obs2');
+    
+    obs1.value += (obs1.value ? '\n' : '') + texto;
+    obs2.value = obs1.value;
+  }
   
   gerarPDF();
 }
 
-function gerarPDF() {
+async function gerarPDF() {
   fechar('modalItens');
   copiarDados();
   
-  html2pdf().set({
-    margin: 0.4,
-    filename: 'Checklist_Revisao_Orla_Scooter.pdf',
-    html2canvas: { scale: 2 },
-    jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).from(document.getElementById('pdf-content')).save();
+  // Tentar converter logo antes de gerar PDF
+  await converterLogoParaBase64();
+  
+  // Aguardar um momento para garantir que as imagens foram processadas
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0.4,
+      filename: 'Checklist_Revisao_Orla_Scooter.pdf',
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      },
+      jsPDF: { format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById('pdf-content')).save();
+  }, 500);
 }
 
 function abrir(id) {
