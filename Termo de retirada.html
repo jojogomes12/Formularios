@@ -120,9 +120,25 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+    //Script da data de retirada
+
+    const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('dataRetirada').setAttribute('min', hoje);
+
+
     async function gerarPDF() {
       const { jsPDF } = window.jspdf;
-      
+      const hoje = new Date().toISOString().split('T')[0];
+      const dataSet =document.getElementById('dataRetirada').value;
+      if (!dataSet) {
+    alert('Selecione a data da retirada.');
+    return;
+  }
+
+  if (dataSet < hoje) {
+    alert('A data de retirada não pode ser anterior ao dia atual.');
+    return;
+  }
       // Coletar dados do formulário
       const nome = document.getElementById('nome').value || '_____________________________';
       const cpf = document.getElementById('cpf').value || '_____________________';
