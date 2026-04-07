@@ -67,48 +67,32 @@ body {
   padding-bottom: 2px;
 }
 
-.obs-container {
-  position: relative;
+/* ===== ÁREA DE OBSERVAÇÕES CORRIGIDA ===== */
+.obs-textarea {
   width: 100%;
-  min-height: 90px;
-}
-
-.linhas-fundo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.linha {
-  width: 100%;
-  height: 1px;
-  background: #000;
-  margin-top: 1.5em;
-}
-
-.linha:first-child {
-  margin-top: 1.5em;
-}
-
-textarea {
-  position: relative;
   border: none;
-  width: 100%;
-  min-height: 90px;
-  resize: none;
-  line-height: 1.5em;
-  font-size: 0.9rem;
   outline: none;
-  padding: 0;
-  margin: 0;
+  resize: none;
+  font-size: 0.9rem;
   font-family: Arial, sans-serif;
   background: transparent;
-  z-index: 1;
+  padding: 0;
+  margin: 0;
+  /* Linhas de fundo via gradiente — acompanham o conteúdo */
+  line-height: 1.8em;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent calc(1.8em - 1px),
+    #000 calc(1.8em - 1px),
+    #000 1.8em
+  );
+  background-attachment: local;
+  overflow: hidden; /* impede scroll interno — cresce com o conteúdo */
+  min-height: 108px; /* 3 linhas mínimas */
 }
+
+/* ===== */
 
 .corte {
   border-top: 2px dashed #000;
@@ -186,17 +170,8 @@ textarea {
   </div>
 
   <div class="mt-5 text-sm">
-    <label class="font-bold">Observações:</label>
-    <div class="obs-container">
-      <div class="linhas-fundo">
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-      </div>
-      <textarea id="obs1"></textarea>
-    </div>
+    <label class="font-bold">Observações:</label><br>
+    <textarea id="obs1" class="obs-textarea" oninput="autoResize(this)"></textarea>
   </div>
 
   <div class="flex justify-between text-sm">
@@ -233,7 +208,7 @@ textarea {
   <h2 class="text-center font-bold text-lg mt-2">CHECKLIST DE REVISÃO</h2>
 
   <p class="text-red-700 text-sm text-center mt-1">
-    <strong>*Prazo mínimo para avaliação de 24hrs. Assim que concluído entraremos em contato.*</strong>
+    <strong>*Prazo mínimo para avaliação de 48hrs. Assim que concluído entraremos em contato.*</strong>
   </p>
 
   <div class="grid grid-cols-2 gap-4 text-sm mt-5">
@@ -244,17 +219,8 @@ textarea {
   </div>
 
   <div class="mt-5 text-sm">
-    <label class="font-bold">Observações:</label>
-    <div class="obs-container">
-      <div class="linhas-fundo">
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-        <div class="linha"></div>
-      </div>
-      <textarea id="obs2" readonly></textarea>
-    </div>
+    <label class="font-bold">Observações:</label><br>
+    <textarea id="obs2" class="obs-textarea" readonly></textarea>
   </div>
 
   <div class="flex justify-between text-sm">
@@ -305,20 +271,21 @@ textarea {
 </div>
 
 <script>
+// Auto-expandir textarea conforme o conteúdo
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
 // Auto-avançar entre campos de data
 document.getElementById('dia1').addEventListener('input', function(e) {
-  if (e.target.value.length === 2) {
-    document.getElementById('mes1').focus();
-  }
+  if (e.target.value.length === 2) document.getElementById('mes1').focus();
 });
-
 document.getElementById('mes1').addEventListener('input', function(e) {
-  if (e.target.value.length === 2) {
-    document.getElementById('ano1').focus();
-  }
+  if (e.target.value.length === 2) document.getElementById('ano1').focus();
 });
 
-// Permitir apenas números nos campos de data
+// Apenas números nos campos de data
 document.querySelectorAll('.data-input').forEach(input => {
   input.addEventListener('keypress', function(e) {
     if (!/\d/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Tab') {
@@ -327,13 +294,10 @@ document.querySelectorAll('.data-input').forEach(input => {
   });
 });
 
-// Converter logo para base64 antes de gerar PDF
 async function converterLogoParaBase64() {
   return new Promise((resolve) => {
     const img1 = document.getElementById('logo1');
     const img2 = document.getElementById('logo2');
-    
-    // Tentar converter a imagem para base64
     try {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -341,13 +305,10 @@ async function converterLogoParaBase64() {
       canvas.height = img1.naturalHeight || img1.height;
       ctx.drawImage(img1, 0, 0);
       const base64 = canvas.toDataURL('image/jpeg');
-      
-      // Aplicar base64 nas duas logos
       img1.src = base64;
       img2.src = base64;
       resolve(true);
     } catch (e) {
-      console.log('Não foi possível converter logo para base64:', e);
       resolve(false);
     }
   });
@@ -357,20 +318,17 @@ function iniciarFluxo() {
   const dia = document.getElementById('dia1').value.trim();
   const mes = document.getElementById('mes1').value.trim();
   const ano = document.getElementById('ano1').value.trim();
-  
+
   if (dia === '' || mes === '' || ano === '') {
     abrir('modalData');
     return;
   }
-  
-  // Copiar data para via 2
+
   document.getElementById('dia2').value = dia;
   document.getElementById('mes2').value = mes;
   document.getElementById('ano2').value = ano;
-  
-  // Copiar dados dos campos para via 2
+
   copiarDados();
-  
   abrir('modalItens');
 }
 
@@ -379,18 +337,17 @@ function copiarDados() {
   document.getElementById('telefone2').value = document.getElementById('telefone1').value;
   document.getElementById('modelo2').value = document.getElementById('modelo1').value;
   document.getElementById('marca2').value = document.getElementById('marca1').value;
-  document.getElementById('obs2').value = document.getElementById('obs1').value;
+
+  const obs2 = document.getElementById('obs2');
+  obs2.value = document.getElementById('obs1').value;
+  // Sincronizar altura da via 2
+  autoResize(obs2);
 }
 
 function confirmarDataVazia() {
-  // Deixar vazio para preenchimento manual
-  document.getElementById('dia1').value = '';
-  document.getElementById('mes1').value = '';
-  document.getElementById('ano1').value = '';
-  document.getElementById('dia2').value = '';
-  document.getElementById('mes2').value = '';
-  document.getElementById('ano2').value = '';
-  
+  ['dia1','mes1','ano1','dia2','mes2','ano2'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
   fechar('modalData');
   copiarDados();
   abrir('modalItens');
@@ -400,34 +357,28 @@ function confirmarItens() {
   const carregador = document.getElementById('carregador').value;
   const chaves = document.getElementById('chaves').value.trim();
   const outros = document.getElementById('outros').value.trim();
-  
-  // Só adicionar se houver algum item preenchido
+
   if (carregador === 'Sim' || chaves !== '' || outros !== '') {
     const texto = `Itens deixados: Carregador: ${carregador} | Chaves: ${chaves || '—'} | Outros: ${outros || '—'}`;
-    
     const obs1 = document.getElementById('obs1');
-    const obs2 = document.getElementById('obs2');
-    
     obs1.value += (obs1.value ? '\n' : '') + texto;
-    obs2.value = obs1.value;
+    autoResize(obs1);
   }
-  
+
   gerarPDF();
 }
 
 async function gerarPDF() {
   fechar('modalItens');
   copiarDados();
-  
-  // Tentar converter logo antes de gerar PDF
+
   await converterLogoParaBase64();
-  
-  // Aguardar um momento para garantir que as imagens foram processadas
+
   setTimeout(() => {
     html2pdf().set({
       margin: 0.4,
       filename: 'Checklist_Revisao_Orla_Scooter.pdf',
-      html2canvas: { 
+      html2canvas: {
         scale: 2,
         useCORS: true,
         allowTaint: true
@@ -450,4 +401,3 @@ function fechar(id) {
 
 </body>
 </html>
-
