@@ -7,21 +7,41 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-a<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checklist de Entrada de Veículo — ORLA SCOOTER</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     @media print {
       .no-print { display: none; }
       body { background: white; margin: 0; }
     }
+    #modal-busca div:hover {
+  background: #f3f4f6;
+}
+/* OVERLAY */
+#overlay {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+#overlay.ativo {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* MODAL BASE */
+#modal-busca {
+  opacity: 0;
+  transform: translate(-50%, -30%) scale(0.95);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+/* MODAL ATIVO */
+#modal-busca.ativo {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+}
 
     body {
       font-family: Arial, sans-serif;
@@ -269,30 +289,50 @@ a<!DOCTYPE html>
 <!-- ======= CONTROLES (não aparecem no PDF) ======= -->
 <div class="no-print controls-bar">
 
-  <!-- Toggle: incluir assinaturas -->
-  <label class="toggle-wrap" title="Incluir campos de assinatura no PDF">
+  <!-- Buscar Cliente -->
+  <button class="btn" onclick="abrirModal()">
+    🔎 Buscar Cliente
+  </button>
+
+
+  <!-- Assinatura -->
+  <div class="toggle-wrap" title="Incluir campos de assinatura no PDF">
     <label class="switch">
       <input type="checkbox" id="toggle-assinatura" checked>
       <span class="slider"></span>
     </label>
-    Incluir campos de assinatura
-  </label>
-<label class="toggle-wrap" title="Usar data automática de hoje">
-  <label class="switch">
-    <input type="checkbox" id="toggle-data">
-    <span class="slider"></span>
-  </label>
-  Usar data automática
-</label>
-  <!-- Botão gerar PDF -->
-  <button class="btn" onclick="gerarPDF()">⬇ Gerar PDF</button>
-<label class="toggle-wrap" title="Gerar formulário físico sem preencher">
-  <label class="switch">
-    <input type="checkbox" id="toggle-branco">
-    <span class="slider"></span>
-  </label>
-  Imprimir formulário em branco
-</label>
+
+    <span>Incluir campos de assinatura</span>
+  </div>
+
+
+  <!-- Data automática -->
+  <div class="toggle-wrap" title="Usar data automática de hoje">
+    <label class="switch">
+      <input type="checkbox" id="toggle-data">
+      <span class="slider"></span>
+    </label>
+
+    <span>Usar data automática</span>
+  </div>
+
+
+  <!-- Gerar PDF -->
+  <button class="btn" onclick="gerarPDF()">
+    ⬇ Gerar PDF
+  </button>
+
+
+  <!-- Formulário em branco -->
+  <div class="toggle-wrap" title="Gerar formulário físico sem preencher">
+    <label class="switch">
+      <input type="checkbox" id="toggle-branco">
+      <span class="slider"></span>
+    </label>
+
+    <span>Imprimir formulário em branco</span>
+  </div>
+
 </div>
 
 <!-- ======= CONTEÚDO DO PDF ======= -->
@@ -355,26 +395,26 @@ a<!DOCTYPE html>
   <!-- Itens do Veículo -->
   <div class="section-title">Itens do Veículo</div>
   <div class="checkbox-grid">
-    <div class="checkbox-item"><input type="checkbox"> Suspensão <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Pneu <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Painel <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Acelerador <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Garfo <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Guidão <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Lanterna <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Farol <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Freios <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Descanso <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Bateria <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Motor <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Buzina <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Setas <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Manete <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Fiação elétrica <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Carenagem <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Módulo <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Pisca Alerta <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Outros <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Suspensão <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Pneu <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Painel <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Acelerador <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Garfo <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Guidão <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Lanterna <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Farol <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Freios <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Descanso <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Bateria <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Motor <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Buzina <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Setas <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Manete <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Fiação elétrica <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Carenagem <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Módulo <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Pisca Alerta <input type="text" class="line-space-input"></div>
+    <div class="checkbox-item"><input type="checkbox" class="item-checkbox"> Outros <input type="text" class="line-space-input"></div>
   </div>
 
   <!-- Observações -->
@@ -417,28 +457,41 @@ function gerarDataHoje() {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+if (toggleData) {
+
 toggleData.addEventListener('change', () => {
 
   if (toggleData.checked) {
-    // Usar data automática
+
     dataAutomatica.textContent = gerarDataHoje();
     dataAutomatica.classList.remove('hidden');
     dataManual.classList.add('hidden');
+
   } else {
-    // Usar data manual
+
     dataAutomatica.classList.add('hidden');
     dataManual.classList.remove('hidden');
+
   }
 
 });
+
+}
 
   // Toggle: mostrar/ocultar bloco de assinatura em tempo real no formulário
   const toggleAssinatura = document.getElementById('toggle-assinatura');
   const blocoAssinatura  = document.getElementById('bloco-assinatura');
 
-  toggleAssinatura.addEventListener('change', () => {
-    blocoAssinatura.style.display = toggleAssinatura.checked ? 'flex' : 'none';
-  });
+  if(toggleAssinatura){
+
+toggleAssinatura.addEventListener('change', () => {
+
+  blocoAssinatura.style.display =
+  toggleAssinatura.checked ? 'flex' : 'none';
+
+});
+
+}
 
   // Campos obrigatórios
   const camposObrigatorios = [
@@ -459,7 +512,9 @@ toggleData.addEventListener('change', () => {
   // Gerar PDF
   function gerarPDF() {
 
-  const imprimirEmBranco = document.getElementById('toggle-branco').checked;
+  const toggleBranco = document.getElementById('toggle-branco');
+
+const imprimirEmBranco = toggleBranco ? toggleBranco.checked : false;
 
   // Se NÃO for formulário em branco → valida
   if (!imprimirEmBranco) {
@@ -479,7 +534,7 @@ toggleData.addEventListener('change', () => {
     }
   }
 
-  const comAssinatura = toggleAssinatura.checked;
+  const comAssinatura = toggleAssinatura ? toggleAssinatura.checked : false;
   blocoAssinatura.style.display = comAssinatura ? 'flex' : 'none';
 
   const nome   = document.getElementById('campo-nome').value.trim();
@@ -495,7 +550,10 @@ toggleData.addEventListener('change', () => {
     nomeArquivo = partes.length > 0 ? partes.join(' ') : 'Checklist_Entrada_Veiculo';
   }
 
-  html2pdf().set({
+ console.log("GERANDO PDF");
+console.log(document.getElementById('pdf-content'));
+
+html2pdf().set({
     margin: 0.3,
     filename: `${nomeArquivo}.pdf`,
     html2canvas: { scale: 2, useCORS: true },
@@ -541,535 +599,37 @@ toggleData.addEventListener('change', () => {
         limparEndereco();
       });
   });
+  function abrirModal() {
+  document.getElementById("overlay").classList.add("ativo");
+  document.getElementById("modal-busca").classList.add("ativo");
+}
+
+function fecharModal() {
+  const modal = document.getElementById("modal-busca");
+  const overlay = document.getElementById("overlay");
+
+  modal.classList.remove("ativo");
+  overlay.classList.remove("ativo");
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") fecharModal();
+});
 </script>
+<!-- OVERLAY -->
+<div id="overlay" onclick="fecharModal()"
+style="position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:998;"></div>
 
-</body>
-</html>
-  <style>
-    @media print {
-      .no-print { display: none; }
-      body { background: white; margin: 0; }
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      color: #000;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    #pdf-content {
-      background: white;
-      max-width: 800px;
-      width: 100%;
-      padding: 2rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-top: 1rem;
-    }
-
-    .input-line {
-      border: none;
-      border-bottom: 1px solid #000;
-      width: 100%;
-      outline: none;
-      height: 1.5em;
-    }
-
-    .section-title {
-      font-weight: bold;
-      margin-top: 1rem;
-      border-bottom: 1px solid #000;
-      padding-bottom: 0.1rem;
-      font-size: 1rem;
-    }
-
-    textarea {
-      border: none;
-      width: 100%;
-      height: 50px;
-      line-height: 1.5em;
-      background-image: linear-gradient(to bottom, transparent 95%, black 96%);
-      background-size: 100% 1.5em;
-      resize: none;
-      padding: 3px;
-    }
-
-    .signature {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1.5rem;
-    }
-
-    .signature-line {
-      border-top: 1px solid #000;
-      width: 45%;
-      text-align: center;
-      padding-top: 0.3rem;
-    }
-
-    /* ── Botões principais ── */
-    .btn {
-      background-color: #f97316;
-      color: #fff;
-      padding: 0.75rem 2rem;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      font-size: 1rem;
-      transition: background-color 0.2s;
-    }
-
-    .btn:hover { background-color: #ea580c; }
-
-    /* ── Toggle de assinatura ── */
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #fff;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 0.55rem 1.1rem;
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #374151;
-      cursor: pointer;
-      user-select: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .toggle-wrap:hover {
-      border-color: #f97316;
-      box-shadow: 0 0 0 2px rgba(249,115,22,0.15);
-    }
-
-    /* Switch visual */
-    .switch {
-      position: relative;
-      width: 38px;
-      height: 21px;
-      flex-shrink: 0;
-    }
-
-    .switch input { opacity: 0; width: 0; height: 0; }
-
-    .slider {
-      position: absolute;
-      inset: 0;
-      background-color: #d1d5db;
-      border-radius: 21px;
-      transition: background-color 0.25s;
-    }
-
-    .slider::before {
-      content: '';
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      left: 3px;
-      top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.25s;
-    }
-
-    .switch input:checked + .slider { background-color: #f97316; }
-    .switch input:checked + .slider::before { transform: translateX(17px); }
-
-    /* ── Checklist grid ── */
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px 15px;
-      margin-top: 6px;
-    }
-
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      font-family: Arial;
-      font-size: 0.9rem;
-      gap: 6px;
-    }
-
-    .checkbox-item input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      appearance: none;
-      border: 1px solid #000;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .checkbox-item input[type="checkbox"]:checked::after {
-      content: "✔";
-      position: absolute;
-      left: 1px;
-      top: -2px;
-      font-size: 16px;
-    }
-
-    .obrigatorio {
-      color: #dc2626;
-      font-size: 0.85rem;
-    }
-
-    .campo-req.campo-erro {
-      border-bottom: 2px solid #dc2626 !important;
-      background-color: #fff5f5;
-    }
-
-    .line-space-input {
-      border: none;
-      border-bottom: 1px solid #000;
-      flex: 1;
-      outline: none;
-      font-size: 0.85rem;
-      padding: 0 4px;
-      height: 20px;
-      background: transparent;
-    }
-
-    /* ── Barra de controles (no-print) ── */
-    .controls-bar {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 6px;
-    }
-.bloco-final-documento {
-  margin-top: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-/* Lado esquerdo */
-.coluna-esquerda {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.coluna-esquerda label {
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.coluna-esquerda input {
-  width: 180px;
-  border: none;
-  border-bottom: 1px solid #000;
-  padding: 4px;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Lado direito */
-.coluna-direita {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-}
-
-.linha-assinatura {
-  width: 100%;
-  border-bottom: 1px solid #000;
-  margin-bottom: 6px;
-}
-
-.coluna-direita span {
-  font-size: 13px;
-}
-  </style>
-</head>
-
-<body>
-
-<!-- ======= CONTROLES (não aparecem no PDF) ======= -->
-<div class="no-print controls-bar">
-
-  <!-- Toggle: incluir assinaturas -->
-  <label class="toggle-wrap" title="Incluir campos de assinatura no PDF">
-    <label class="switch">
-      <input type="checkbox" id="toggle-assinatura" checked>
-      <span class="slider"></span>
-    </label>
-    Incluir campos de assinatura
-  </label>
-<label class="toggle-wrap" title="Usar data automática de hoje">
-  <label class="switch">
-    <input type="checkbox" id="toggle-data">
-    <span class="slider"></span>
-  </label>
-  Usar data automática
-</label>
-  <!-- Botão gerar PDF -->
-  <button class="btn" onclick="gerarPDF()">⬇ Gerar PDF</button>
-<label class="toggle-wrap" title="Gerar formulário físico sem preencher">
-  <label class="switch">
-    <input type="checkbox" id="toggle-branco">
-    <span class="slider"></span>
-  </label>
-  Imprimir formulário em branco
-</label>
-</div>
-
-<!-- ======= CONTEÚDO DO PDF ======= -->
-<div id="pdf-content">
-
-  <!-- Cabeçalho -->
-  <div class="flex justify-between items-start mb-2">
-    <div>
-      <img src="https://i.ibb.co/BHwVYdpb/logo.jpg" class="h-16" crossorigin="anonymous">
-      <p class="text-sm"><strong>Tel:</strong> (21) 96778-5726</p>
-    </div>
-    <div class="text-sm text-right">
-      <strong>Data:</strong> <span id="data-atual"></span><div class="flex items-center gap-2 justify-end">
+<!-- MODAL -->
+<div id="modal-busca"
+style="position:fixed; top:50%; left:50%; background:#fff; padding:20px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.2); width:400px; z-index:999;">
   
+  <input type="text" id="input-busca" placeholder="Digite o nome..." 
+    style="width:100%; padding:8px; border:1px solid #ccc; margin-bottom:10px;"
+    onkeyup="buscarCliente()">
 
-  <!-- Campo manual (padrão) -->
-  <input type="text" id="data-manual"
-         placeholder="____ / ____ / ______"
-         class="input-line w-40 text-center">
+  <div id="lista-clientes"></div>
 
-  <!-- Data automática -->
-  <span id="data-automatica" class="hidden"></span>
+  <button onclick="fecharModal()" class="btn mt-2">Fechar</button>
 </div>
-    </div>
-  </div>
-
-  <div class="text-center -mt-4 text-sm">
-    Avenida Benvindo Taques Horta Júnior, Jardim Atlântico Leste, Itaipuaçu – Maricá/RJ
-  </div>
-
-  <div class="text-red-700 mt-2 text-sm text-center">
-    <strong>*Prazo mínimo para avaliação/orçamento de 48hrs (podendo se estender caso necessário)*</strong>
-  </div>
-
-  <h2 class="text-center font-bold text-lg mt-1">Checklist de Entrada de Veículo</h2>
-
-  <!-- Dados do Cliente -->
-  <div class="section-title">Dados do Cliente</div>
-  <div class="grid grid-cols-2 gap-2 text-sm">
-    <label>Nome: <input id="campo-nome" class="input-line campo-req"></label>
-    <label>Telefone: <input id="campo-telefone" class="input-line campo-req"></label>
-    <label>CEP: </span><input id="cep" class="input-line campo-req" maxlength="9"></label>
-    <label>Município:<input id="cidade" class="input-line"></label>
-    <label>Bairro:<input id="bairro" class="input-line"></label>
-    <label>Endereço:<input id="endereco" class="input-line"></label>
-    <label>Complemento:<input class="input-line"></label>
-      <label>CPF:<input class="input-line"></label>
-  </div>
-
-  <!-- Dados do Veículo -->
-  <div class="section-title">Dados do Veículo</div>
-  <div class="grid grid-cols-2 gap-2 text-sm">
-    <label>Modelo: <input id="campo-modelo" class="input-line campo-req"></label>
-    <label>Marca:<input class="input-line"></label>
-    <label>Cor: <input id="campo-cor" class="input-line campo-req"></label>
-    <label>Ano:<input class="input-line"></label>
-    
-  </div>
-
-  <!-- Itens do Veículo -->
-  <div class="section-title">Itens do Veículo</div>
-  <div class="checkbox-grid">
-    <div class="checkbox-item"><input type="checkbox"> Suspensão <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Pneu <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Painel <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Acelerador <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Garfo <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Guidão <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Lanterna <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Farol <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Freios <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Descanso <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Bateria <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Motor <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Buzina <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Setas <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Manete <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Fiação elétrica <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Carenagem <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Módulo <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Pisca Alerta <input type="text" class="line-space-input"></div>
-    <div class="checkbox-item"><input type="checkbox"> Outros <input type="text" class="line-space-input"></div>
-  </div>
-
-  <!-- Observações -->
-  <div class="section-title">Observações</div>
-  <textarea></textarea>
-
-  <!-- Assinaturas (visibilidade controlada pelo toggle) -->
-  <div id="bloco-assinatura" class="signature text-sm">
-    <div class="signature-line">Assinatura do Cliente</div>
-    <div class="signature-line">Assinatura do Responsável</div>
-  </div>
-  <!-- Data de Retirado-->
-<div class="bloco-final-documento">
-
-  <div class="coluna-esquerda">
-    <label>Vistoriado e retirado em:</label>
-    <input type="text" id="campo-data-retirada" placeholder="____ / ____ / ______">
-  </div>
-
-  <div class="coluna-direita">
-    <div class="linha-assinatura"></div>
-    <span>Assinatura do Cliente</span>
-  </div>
-
-</div>
-</div><!-- /pdf-content -->
-
-<!-- ======= SCRIPTS ======= -->
-<script>
-  // Data automática
- const toggleData = document.getElementById('toggle-data');
-const dataManual = document.getElementById('data-manual');
-const dataAutomatica = document.getElementById('data-automatica');
-
-function gerarDataHoje() {
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, '0');
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const yyyy = now.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
-}
-
-toggleData.addEventListener('change', () => {
-
-  if (toggleData.checked) {
-    // Usar data automática
-    dataAutomatica.textContent = gerarDataHoje();
-    dataAutomatica.classList.remove('hidden');
-    dataManual.classList.add('hidden');
-  } else {
-    // Usar data manual
-    dataAutomatica.classList.add('hidden');
-    dataManual.classList.remove('hidden');
-  }
-
-});
-
-  // Toggle: mostrar/ocultar bloco de assinatura em tempo real no formulário
-  const toggleAssinatura = document.getElementById('toggle-assinatura');
-  const blocoAssinatura  = document.getElementById('bloco-assinatura');
-
-  toggleAssinatura.addEventListener('change', () => {
-    blocoAssinatura.style.display = toggleAssinatura.checked ? 'flex' : 'none';
-  });
-
-  // Campos obrigatórios
-  const camposObrigatorios = [
-    { id: 'campo-nome',     label: 'Nome' },
-    { id: 'campo-telefone', label: 'Telefone' },
-    { id: 'cep',            label: 'CEP' },
-    { id: 'campo-modelo',   label: 'Modelo' },
-    { id: 'campo-cor',      label: 'Cor' },
-    
-  ];
-
-  // Remove destaque de erro ao digitar
-  camposObrigatorios.forEach(({ id }) => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', () => el.classList.remove('campo-erro'));
-  });
-
-  // Gerar PDF
-  function gerarPDF() {
-
-  const imprimirEmBranco = document.getElementById('toggle-branco').checked;
-
-  // Se NÃO for formulário em branco → valida
-  if (!imprimirEmBranco) {
-
-    const vazios = camposObrigatorios.filter(({ id }) => {
-      const el = document.getElementById(id);
-      const vazio = !el || !el.value.trim();
-      if (el) el.classList.toggle('campo-erro', vazio);
-      return vazio;
-    });
-
-    if (vazios.length > 0) {
-      const lista = vazios.map(c => '• ' + c.label).join('\n');
-      alert('Preencha os campos obrigatórios antes de gerar o PDF:\n\n' + lista);
-      document.getElementById(vazios[0].id)?.focus();
-      return;
-    }
-  }
-
-  const comAssinatura = toggleAssinatura.checked;
-  blocoAssinatura.style.display = comAssinatura ? 'flex' : 'none';
-
-  const nome   = document.getElementById('campo-nome').value.trim();
-  const modelo = document.getElementById('campo-modelo').value.trim();
-  const cor    = document.getElementById('campo-cor').value.trim();
-
-  let nomeArquivo;
-
-  if (imprimirEmBranco) {
-    nomeArquivo = "Checklist_Entrada_Veiculo_Em_Branco";
-  } else {
-    const partes = [nome, modelo, cor].filter(Boolean);
-    nomeArquivo = partes.length > 0 ? partes.join(' ') : 'Checklist_Entrada_Veiculo';
-  }
-
-  html2pdf().set({
-    margin: 0.3,
-    filename: `${nomeArquivo}.pdf`,
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).from(document.getElementById('pdf-content')).save();
-}
-
-  // CEP automático
-  const cepInput     = document.getElementById('cep');
-  const enderecoInput = document.getElementById('endereco');
-  const bairroInput   = document.getElementById('bairro');
-  const cidadeInput   = document.getElementById('cidade');
-  let ultimoCep = '';
-
-  function limparEndereco() {
-    enderecoInput.value = '';
-    bairroInput.value   = '';
-    cidadeInput.value   = '';
-  }
-
-  cepInput.addEventListener('input', () => {
-    cepInput.value = cepInput.value
-      .replace(/\D/g, '')
-      .replace(/^(\d{5})(\d)/, '$1-$2')
-      .slice(0, 9);
-
-    const cep = cepInput.value.replace(/\D/g, '');
-    if (cep.length !== 8 || cep === ultimoCep) return;
-    ultimoCep = cep;
-
-    fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`)
-      .then(r => {
-        if (!r.ok) throw new Error('CEP não encontrado');
-        return r.json();
-      })
-      .then(data => {
-        enderecoInput.value = data.street       || '';
-        bairroInput.value   = data.neighborhood || '';
-        cidadeInput.value   = `${data.city} - ${data.state}`;
-      })
-      .catch(() => {
-        alert('CEP não encontrado');
-        limparEndereco();
-      });
-  });
-</script>
-
 </body>
 </html>
