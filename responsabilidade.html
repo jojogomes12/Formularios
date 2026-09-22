@@ -243,16 +243,9 @@
     // ================================
     async function gerarPDF() {
 
+      // Campos podem ficar vazios
       const nome = document.getElementById('nome').value.trim();
       const cpf = document.getElementById('cpf').value.trim();
-
-      // CPF NÃO é obrigatório
-      if (!nome) {
-
-        alert('Por favor, preencha o nome antes de gerar o PDF.');
-        return;
-
-      }
 
       const { jsPDF } = window.jspdf;
 
@@ -360,6 +353,7 @@
 
       doc.setFont('helvetica', 'normal');
 
+      // Se estiver vazio, mantém espaço em branco
       doc.text(
         nome,
         marginLeft + 15,
@@ -369,7 +363,9 @@
       y += 7;
 
 
+      // ================================
       // CPF
+      // ================================
       doc.setFont('helvetica', 'bold');
 
       doc.text(
@@ -380,9 +376,9 @@
 
       doc.setFont('helvetica', 'normal');
 
-      // Exibe o CPF mesmo sendo opcional
+      // Se estiver vazio, mantém espaço em branco
       doc.text(
-        cpf || 'Não informado',
+        cpf,
         marginLeft + 15,
         y
       );
@@ -396,7 +392,6 @@
       doc.setFontSize(10);
 
       doc.setFont('helvetica', 'normal');
-
 
       const texto1 =
         'Declaro que realizarei TEST DRIVE de scooter/moto elétrica da ORLA SCOOTERS ELÉTRICAS e assumo TOTAL RESPONSABILIDADE por:';
@@ -569,10 +564,9 @@
       // ================================
       // Nome do arquivo
       // ================================
-      const nomeArquivo =
-        `termo-testdrive-${nome
-          .replace(/\s+/g, '_')
-          .toLowerCase()}.pdf`;
+      const nomeArquivo = nome
+        ? `termo-testdrive-${nome.replace(/\s+/g, '_').toLowerCase()}.pdf`
+        : 'termo-testdrive.pdf';
 
 
       // ================================
