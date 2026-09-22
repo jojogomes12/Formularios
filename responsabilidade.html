@@ -154,7 +154,6 @@ async function gerarPDF() {
     if (nome) {
         doc.text(nome, marginLeft + 15, y);
     } else {
-        // Desenha linha para preenchimento manual se estiver vazio
         doc.line(marginLeft + 15, y, marginRight, y);
     }
     y += 8;
@@ -166,52 +165,104 @@ async function gerarPDF() {
     if (cpf) {
         doc.text(cpf, marginLeft + 12, y);
     } else {
-        // Desenha linha para preenchimento manual se estiver vazio
         doc.line(marginLeft + 12, y, marginRight, y);
     }
     y += 12;
 
-    // Texto do termo
+    // Texto de Abertura
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    const texto1 = 'Declaro que realizarei TEST DRIVE de scooter/moto elétrica da ORLA SCOOTERS ELÉTRICAS e assumo TOTAL RESPONSABILIDADE por:';
-    const linhas1 = doc.splitTextToSize(texto1, marginRight - marginLeft);
-    doc.text(linhas1, marginLeft, y);
-    y += linhas1.length * 5 + 5;
+    doc.text('Declaro que realizarei ', marginLeft, y);
+    let currentX = marginLeft + doc.getTextWidth('Declaro que realizarei ');
 
-    // Responsabilidades
+    doc.setFont('helvetica', 'bold');
+    doc.text('TEST DRIVE', currentX, y);
+    currentX += doc.getTextWidth('TEST DRIVE');
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(' de scooter/moto elétrica da ', currentX, y);
+    currentX += doc.getTextWidth(' de scooter/moto elétrica da ');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('ORLA SCOOTERS ELÉTRICAS', marginLeft, y + 5);
+    currentX = marginLeft + doc.getTextWidth('ORLA SCOOTERS ELÉTRICAS');
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(' e assumo ', currentX, y + 5);
+    currentX += doc.getTextWidth(' e assumo ');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL RESPONSABILIDADE', currentX, y + 5);
+    currentX += doc.getTextWidth('TOTAL RESPONSABILIDADE');
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(' por:', currentX, y + 5);
+
+    y += 15;
+
+    // Lista de Responsabilidades com Negritos Destacados
     const responsabilidades = [
-        '• Qualquer dano, queda ou avaria causado ao veículo durante o test drive, comprometendo-me a arcar com todos os custos de reparo.',
-        '• Furto, roubo ou desaparecimento do veículo, responsabilizando-me pelo valor total da scooter/moto em caso de não recuperação.',
-        '• Acidentes envolvendo terceiros, assumindo responsabilidade civil e criminal por danos materiais ou corporais.',
-        '• Multas e infrações de trânsito cometidas durante o período do test drive.',
-        '• Devolver o veículo no horário e local acordados, nas mesmas condições em que o recebi.'
+        { bold: '• Qualquer dano, queda ou avaria', text: ' causado ao veículo durante o test drive, comprometendo-me a arcar com todos os custos de reparo.' },
+        { bold: '• Furto, roubo ou desaparecimento', text: ' do veículo, responsabilizando-me pelo valor total da scooter/moto em caso de não recuperação.' },
+        { bold: '• Acidentes envolvendo terceiros', text: ', assumindo responsabilidade civil e criminal por danos materiais ou corporais.' },
+        { bold: '• Multas e infrações de trânsito', text: ' cometidas durante o período do test drive.' },
+        { bold: '• Devolver o veículo no horário e local acordados', text: ', nas mesmas condições em que o recebi.' }
     ];
 
-    responsabilidades.forEach(resp => {
-        const linhasResp = doc.splitTextToSize(resp, marginRight - marginLeft - 3);
-        doc.text(linhasResp, marginLeft + 3, y);
-        y += linhasResp.length * 5 + 3;
+    responsabilidades.forEach(item => {
+        doc.setFont('helvetica', 'bold');
+        doc.text(item.bold, marginLeft + 3, y);
+        
+        const boldWidth = doc.getTextWidth(item.bold);
+        doc.setFont('helvetica', 'normal');
+        
+        const linhasResto = doc.splitTextToSize(item.text, marginRight - (marginLeft + 3 + boldWidth));
+        
+        if (linhasResto.length > 0) {
+            doc.text(linhasResto[0], marginLeft + 3 + boldWidth, y);
+            if (linhasResto.length > 1) {
+                const linhasSubsequentes = doc.splitTextToSize(linhasResto.slice(1).join(' '), marginRight - marginLeft - 3);
+                doc.text(linhasSubsequentes, marginLeft + 3, y + 5);
+                y += (linhasSubsequentes.length) * 5;
+            }
+        }
+        y += 8;
     });
 
-    y += 3;
+    y += 2;
 
-    // Texto final
-    const texto2 = 'Estou ciente de que este termo possui validade legal e que a ORLA SCOOTERS ELÉTRICAS poderá tomar as medidas cabíveis, incluindo ações judiciais, para ressarcimento de danos ou perdas causadas por mim durante o test drive.';
-    const linhas2 = doc.splitTextToSize(texto2, marginRight - marginLeft);
-    doc.text(linhas2, marginLeft, y);
-    y += linhas2.length * 5 + 15;
+    // Texto Final com Destaques em Negrito
+    doc.setFont('helvetica', 'normal');
+    doc.text('Estou ciente de que este termo possui ', marginLeft, y);
+    currentX = marginLeft + doc.getTextWidth('Estou ciente de que este termo possui ');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('validade legal', currentX, y);
+    currentX += doc.getTextWidth('validade legal');
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(' e que a ', currentX, y);
+    currentX += doc.getTextWidth(' e que a ');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('ORLA SCOOTERS ELÉTRICAS', currentX, y);
+
+    y += 5;
+
+    doc.setFont('helvetica', 'normal');
+    doc.text('poderá tomar as medidas cabíveis, incluindo ações judiciais, para ressarcimento de danos ou perdas causadas por mim durante o test drive.', marginLeft, y, { maxWidth: marginRight - marginLeft });
+    
+    y += 20;
 
     // Data
+    doc.setFont('helvetica', 'normal');
     if (nome || cpf) {
-        // Se houver dados preenchidos, insere a data atual automaticamente
         const hoje = new Date();
         const dia = String(hoje.getDate()).padStart(2, '0');
         const mes = String(hoje.getMonth() + 1).padStart(2, '0');
         const ano = hoje.getFullYear();
         doc.text(`Maricá, ${dia}/${mes}/${ano}`, 105, y, { align: 'center' });
     } else {
-        // Se estiver totalmente vazio, deixa linha para preencher a data manualmente
         doc.text('Maricá, ____/____/________', 105, y, { align: 'center' });
     }
     y += 20;
